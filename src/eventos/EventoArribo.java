@@ -17,22 +17,30 @@ public class EventoArribo extends Evento {
         Estadisticas.actualizarCantidadPacientes(this.getPaciente().getCuadroClinico());
     }
 
+    public Servidor servidorDeEvento(Servidores servidores) {
+        if (servidores.estanOcupados(this.getPaciente().getCuadroClinico())) {
+            return servidores.asignacionServidor(this.getPaciente().getCuadroClinico());
+        } else {
+            return servidores.getServidorDesocupado(this.getPaciente().getCuadroClinico());
+        }
+    }
 
     public void planificarEvento(Servidores servidores) {
+        Servidor servidorActual = servidorDeEvento(servidores);
+
+
         // Si todos los servidores estan ocupados, del cuadro dado, lo ponemos en la cola mas corta
 
-        if (servidores.estanOcupados(this.getPaciente().getCuadroClinico())) {
-            servidores.asignacionCola(this.getPaciente().getCuadroClinico()).insertarCola(this.getPaciente());
+        if (servidorActual.isOcupado()) {
+            servidorActual.getCola().insertarCola(this.getPaciente());
         } else {
-            // Si no, lo ponemos en el primer servidor desocupado que encontremos.
 
-            Servidor primerDescoupado = servidores.getServidorDesocupado(this.getPaciente().getCuadroClinico());
             // Recuperamos el servidor desocupado, el cual sabemos que existe.
 
-            primerDescoupado.setPaciente(this.getPaciente());
+            servidorActual.setPaciente(this.getPaciente());
             // Le ponemos el paciente en cuestion
 
-            primerDescoupado.setOcupado(true);
+            servidorActual.setOcupado(true);
             // Lo marcamos como ocupado.
 
             this.getPaciente().setTiempoDuracionServicio((float) GeneradorTiempos.getTiempoDuracionServicio(this.getPaciente().getCuadroClinico()));
@@ -42,7 +50,7 @@ public class EventoArribo extends Evento {
             Fel.getFel().insertarFel(eventoSalida);
             // Agregamos a la fel el evento de salida.
 
-            primerDescoupado.setTiempoOcioso(this.getTiempo());
+            servidorActual.setTiempoOcioso(this.getTiempo());
             // Recolectamos el tiempo ocioso de este servidor.
         }
 

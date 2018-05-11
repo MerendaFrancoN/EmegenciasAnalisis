@@ -1,13 +1,20 @@
 package servers;
 
 import hospital.Paciente;
+import hospital.Principal;
 
 public class Servidor {
     private Paciente paciente;
     private boolean ocupado;
     private float tiempoOcioso;
     private float tiempoInicioOcio;
+
+    //flagTrabajo es para saber si un servidor ya trabajó al menos una vez, para que en tiempo ocioso cuando de 0 y trabajó, sea 0% el tiempo de ocio.
+
+    private boolean flagTrabajo;
+
     private Queue cola;
+
 
     private float porcentajeTiempoOcioso;
 
@@ -22,6 +29,8 @@ public class Servidor {
         // Inicio de Ocio en 0
 
         setCola(new Queue()); //Inicialización de la cola, vacia.
+
+        flagTrabajo = false;
     }
 
     public Paciente getPaciente() {
@@ -38,6 +47,7 @@ public class Servidor {
 
     public void setOcupado(boolean ocupado) {
         this.ocupado = ocupado;
+        flagTrabajo = true;
     }
 
     /**
@@ -67,6 +77,10 @@ public class Servidor {
 
 
     public float getTiempoOcioso() {
+        /*Si el tiempo ocioso es 0 y nunca trabajó, devuelvo el tiempo total de ejecución.*/
+        if (tiempoOcioso == 0 && !flagTrabajo)
+            return Principal.tiempoEsperadoDeEjecucion;
+
         return tiempoOcioso;
     }
 

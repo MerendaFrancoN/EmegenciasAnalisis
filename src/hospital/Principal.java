@@ -9,8 +9,8 @@ import servers.Servidores;
 
 public class Principal {
 
-    private static final float tiempoEsperadoDeEjecucion = 604800; // 168 Horas = 604800 Minutos
-    private static final int cantIteraciones = 100;
+    public static final float tiempoEsperadoDeEjecucion = 604800; // 168 Horas = 604800 Minutos
+    private static final int cantIteraciones = 50;
 
     public static void main(String[] args) {
 

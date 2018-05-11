@@ -28,14 +28,10 @@ public class Servidores {
         }
     }
 
-    /**
-     * @param cuadroClinico tipo de Cuadro Clinico del que se quiere conocer la cola mas corta.
-     * @return Queue del servidor del Cuadro Clinico indicado mas corta, o la primera en caso de que sean todos iguales.
-     */
-    public Queue asignacionCola(byte cuadroClinico) {
+    //Metodo con otra implementación más simple
+    public Servidor asignacionServidor(byte cuadroClinico) {
+        Servidor servidorAsignado = null;
 
-        Queue colaAsignada = null;
-        // La cola que retorna.
         int colaMasCorta = 1000000000;
         // Valor para comparar el tamaño de cola
         LinkedList<Servidor> listaServidores = listaServidoresPorTipo(cuadroClinico);
@@ -43,13 +39,13 @@ public class Servidores {
 
         for (Servidor x : listaServidores) {
             if (x.getCola().getCantidadItems() < colaMasCorta) {
-                colaAsignada = x.getCola();
                 colaMasCorta = x.getCola().getCantidadItems();
+                servidorAsignado = x;
             }
         }
-        return colaAsignada;
-        // Podria hacerse un control por retorno como null.
+        return servidorAsignado;
     }
+
 
     /**
      * @param cuadroClinico Cuadro Clinico del que queremos ver si estan o no los servidores ocupados
