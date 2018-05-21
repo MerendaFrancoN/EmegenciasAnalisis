@@ -1,5 +1,6 @@
 package eventos;
 
+import estadistica.Corrida;
 import hospital.Paciente;
 import servers.Servidores;
 
@@ -35,7 +36,7 @@ public abstract class Evento implements Comparable<Evento> {
     }
 
     // Implementa la planificacion de eventos.
-    public abstract void planificarEvento(Servidores servidor);
+    public abstract void planificarEvento(Servidores servidor, Corrida corrida);
 
     @Override
     public int compareTo(Evento o) {

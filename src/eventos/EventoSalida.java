@@ -1,9 +1,11 @@
 package eventos;
 
+import estadistica.Corrida;
 import fel.Fel;
 import fel.GeneradorTiempos;
-import hospital.Estadisticas;
+import estadistica.Estadisticas;
 import hospital.Paciente;
+import javafx.scene.shape.Circle;
 import servers.Servidor;
 import servers.Servidores;
 
@@ -14,7 +16,7 @@ public class EventoSalida extends Evento {
     }
 
     @Override
-    public void planificarEvento(Servidores servidores) {
+    public void planificarEvento(Servidores servidores, Corrida corrida) {
 
         // Recuperamos el servidor que contenia el paciente que se esta yendo.
         Servidor servidorActual = servidores.getServidorConPaciente(this.getPaciente());
@@ -37,10 +39,7 @@ public class EventoSalida extends Evento {
         }
 
         // Colecto tiempo en espera
-        Estadisticas.actualizarTiempoEsperaCola(this.getPaciente().getCuadroClinico(), this.getTiempo(), this.getPaciente().getTiempoDuracionServicio(), this.getPaciente().getTiempoArribo());
-
-        // Colecto tiempo en tránsito
-        //Estadisticas.actualizarTiempoTransito(this.getPaciente().getCuadroClinico(), this.getTiempo(), this.getPaciente().getTiempoArribo());
+        corrida.actualizarTiempoEsperaCola(this.getPaciente().getCuadroClinico(), this.getTiempo(), this.getPaciente().getTiempoDuracionServicio(), this.getPaciente().getTiempoArribo());
 
     }
 }

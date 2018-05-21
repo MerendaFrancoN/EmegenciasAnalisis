@@ -1,5 +1,7 @@
 package hospital;
 
+import estadistica.Corrida;
+import estadistica.Estadisticas;
 import eventos.Evento;
 import eventos.EventoArribo;
 import eventos.EventoFinSimulacion;
@@ -23,8 +25,10 @@ public class Principal {
 
         for (int i = 0; i < cantIteraciones; i++) {
 
-            // Creo la Fel e inicializo los  Servidores
+            // Creamos una nueva corrida.
+            Corrida corrida = new Corrida();
 
+            // Creo la Fel e inicializo los  Servidores
             fel.resetFel();
             servidores = new Servidores();
             servidores.inicializarServidores(2, 1, 2);
@@ -37,11 +41,11 @@ public class Principal {
             fel.insertarFel(new EventoFinSimulacion(tiempoEsperadoDeEjecucion));
 
             // Creo primer evento de Arribo de cada tipo
-            fel.insertarFel(new EventoArribo(tiempoSimulacion, (byte) 0));
+            fel.insertarFel(new EventoArribo(tiempoSimulacion, (byte) 0, corrida));
 
-            fel.insertarFel(new EventoArribo(tiempoSimulacion, (byte) 1));
+            fel.insertarFel(new EventoArribo(tiempoSimulacion, (byte) 1, corrida));
 
-            fel.insertarFel(new EventoArribo(tiempoSimulacion, (byte) 2));
+            fel.insertarFel(new EventoArribo(tiempoSimulacion, (byte) 2, corrida));
 
             // Mostrar la lista para hacer Debug
             // fel.mostrarFel();
@@ -53,7 +57,7 @@ public class Principal {
                 tiempoSimulacion = actual.getTiempo();
 
                 // Planificamos el evento proximo a partir de 'actual'
-                actual.planificarEvento(servidores);
+                actual.planificarEvento(servidores, corrida);
 
                 if (actual.getTipo() == 2) {
                     // Si el evento es de 'FinSimulacion' terminar con el loop.
@@ -62,12 +66,13 @@ public class Principal {
                 // Mostrar la lista para hacer Debug
                 // fel.mostrarFel();
             }
-            // Muestra de resultados
+            // Calculamos las estadisticas por corrida
+            corrida.calcularEstadisticas(servidores, tiempoSimulacion);
 
-            Estadisticas.calcularEstadisticas(servidores, tiempoSimulacion);
-            Estadisticas.resetCorrida();
+            // Reseteamos el numero de pacientes
+            Paciente.resetNumeroPaciente();
         }
-        // Calcula los promedios acorde a la cantidad de iteraciones
+        // Calcula las medias de medias con sus desviaciones
         Estadisticas.analisisPostIteraciones(cantIteraciones);
 
         // Muestra de resultads

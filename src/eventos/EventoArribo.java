@@ -1,20 +1,21 @@
 package eventos;
 
+import estadistica.Corrida;
 import fel.Fel;
 import fel.GeneradorTiempos;
-import hospital.Estadisticas;
+import estadistica.Estadisticas;
 import hospital.Paciente;
 import servers.Servidor;
 import servers.Servidores;
 
 public class EventoArribo extends Evento {
 
-    public EventoArribo(float tiempo, byte cuadroClinico) {
+    public EventoArribo(float tiempo, byte cuadroClinico, Corrida corrida) {
         // Considero que inicia en item n°1
         super((byte) 0, tiempo, new Paciente(tiempo, cuadroClinico));
 
         // Actualizo la cantidad de Items.
-        Estadisticas.actualizarCantidadPacientes(this.getPaciente().getCuadroClinico());
+        corrida.actualizarCantidadPacientes(this.getPaciente().getCuadroClinico());
     }
 
     public Servidor servidorDeEvento(Servidores servidores) {
@@ -25,7 +26,7 @@ public class EventoArribo extends Evento {
         }
     }
 
-    public void planificarEvento(Servidores servidores) {
+    public void planificarEvento(Servidores servidores,Corrida corrida) {
         Servidor servidorActual = servidorDeEvento(servidores);
 
 
@@ -55,7 +56,7 @@ public class EventoArribo extends Evento {
         }
 
         // Un paciente de cuadro 'a' genera siempre uno de cuadro 'a'. Recordar a la hora de inicializar el sistema.
-        Fel.getFel().insertarFel(new EventoArribo(this.getTiempo() + GeneradorTiempos.getTiempoEntreArribos(this.getTiempo(), this.getPaciente().getCuadroClinico()), this.getPaciente().getCuadroClinico()));
+        Fel.getFel().insertarFel(new EventoArribo(this.getTiempo() + GeneradorTiempos.getTiempoEntreArribos(this.getTiempo(), this.getPaciente().getCuadroClinico()), this.getPaciente().getCuadroClinico(),corrida));
     }
 
 }
