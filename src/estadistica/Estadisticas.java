@@ -74,7 +74,7 @@ public class Estadisticas {
 
 
 
-            System.out.printf("Intervalo de tiempo medio de ocio de los médicos: %.2f" + calculoIntervalo(i,cantIteraciones,0)+"\n");
+            System.out.printf("Intervalo de tiempo medio de ocio de los médicos: " + calculoIntervalo(i,cantIteraciones,0)+"\n");
             System.out.printf("Intervalo de tiempo medio de Espera de los médicos" + calculoIntervalo(i,cantIteraciones,1)+ "\n");
             System.out.println("----------------------------------------");
         }
