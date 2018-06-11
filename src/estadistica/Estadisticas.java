@@ -1,5 +1,7 @@
 package estadistica;
 
+import hospital.Principal;
+
 import java.util.LinkedList;
 
 public class Estadisticas {
@@ -75,7 +77,7 @@ public class Estadisticas {
 
 
             System.out.printf("Intervalo de tiempo medio de ocio de los médicos: " + calculoIntervalo(i,cantIteraciones,0)+"\n");
-            System.out.printf("Intervalo de tiempo medio de Espera de los médicos" + calculoIntervalo(i,cantIteraciones,1)+ "\n");
+            System.out.printf("Intervalo de tiempo medio de Espera de los Pacientes" + calculoIntervalo(i,cantIteraciones,1)+ "\n");
             System.out.println("----------------------------------------");
         }
     }
@@ -88,9 +90,12 @@ public class Estadisticas {
 
         if (tipo==0)    {
             s=s.concat(" (%%");
-            s=s.concat(Double.toString(100*(tiempoTotalMedioOcio[indice]-z_90*(tiempoDesviacionesOcio[indice] / Math.sqrt(cantIteraciones) )) /tiempoTotalMedioOcio[indice]) );
+            s=s.concat(Double.toString(100*(tiempoTotalMedioOcio[indice]-z_90*(tiempoDesviacionesOcio[indice] / Math.sqrt(cantIteraciones) )) /Principal.tiempoEsperadoDeEjecucion) );
             s=s.concat(" , %%");
-            s=s.concat(Double.toString(100*(tiempoTotalMedioOcio[indice]+z_90*(tiempoDesviacionesOcio[indice] / Math.sqrt(cantIteraciones) )) /tiempoTotalMedioOcio[indice])  );
+            if( (100*(tiempoTotalMedioOcio[indice]+z_90*(tiempoDesviacionesOcio[indice] / Math.sqrt(cantIteraciones) )) /Principal.tiempoEsperadoDeEjecucion) <100)
+                s=s.concat(Double.toString(100*(tiempoTotalMedioOcio[indice]+z_90*(tiempoDesviacionesOcio[indice] / Math.sqrt(cantIteraciones) )) /Principal.tiempoEsperadoDeEjecucion)  );
+            else
+                s=s.concat("100.000");
             s=s.concat(" )");
         }
         else{
@@ -105,3 +110,4 @@ public class Estadisticas {
     }
 
     }
+

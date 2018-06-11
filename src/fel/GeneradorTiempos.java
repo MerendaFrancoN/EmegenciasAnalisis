@@ -18,6 +18,7 @@ public class GeneradorTiempos {
                     if (numeroRandom <= 0.5)
                         return 10; //Para acumulada de 0.5 => 10 Minutos.
                     else {
+
                         if (numeroRandom <= 0.85)
                             return 20; //Para acumulada de 0.85 => 20 Minutos.
                         else
